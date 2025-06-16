@@ -1,5 +1,5 @@
 numpy
-jax
+jax[cuda]
 torch
 torchvision
 scikit-learn
@@ -9,3 +9,7 @@ plotly
 pandas
 polars
 scipy
+xgboost
+lightgbm
+catboost
+pyarrow
