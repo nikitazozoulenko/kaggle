@@ -9,6 +9,7 @@ plotly
 pandas
 polars
 scipy
+optuna
 xgboost
 lightgbm
 catboost
