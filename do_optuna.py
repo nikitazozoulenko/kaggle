@@ -50,7 +50,7 @@ def lgbm_params(trial):
     return {
         # fixed
         'objective': trial.suggest_categorical('objective', ['regression']),
-        'device': trial.suggest_categorical('device', ['cuda']),
+        'device': trial.suggest_categorical('device', ['gpu']),
         'random_state': trial.suggest_categorical('random_state', [seed]),
         'verbose': trial.suggest_categorical('verbose', [0]),  # no output
         # hyperparams
@@ -80,7 +80,7 @@ def catb_params(trial):
         'depth': trial.suggest_int('depth', 3, 7),
         'subsample': trial.suggest_float('subsample', 0.01, 0.25, log=True),
         #'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.05, 0.25, log=True), # only supported on cpu
-        #'bootstrap_type': trial.suggest_categorical('bootstrap_type', ['Bernoulli']),  
+        'bootstrap_type': trial.suggest_categorical('bootstrap_type', ['Bernoulli']),  
         'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 10, 200, log=True),
     }# other? max_bin?
 
@@ -179,7 +179,7 @@ def parse_args():
         help="Seed for all randomness."
     )
     parser.add_argument(
-        "kfolds",
+        "--kfolds",
         type=int,
         default=5,
         help="Number of folds for optuna cv."
