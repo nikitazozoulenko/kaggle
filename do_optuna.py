@@ -28,7 +28,7 @@ def xgb_params(trial):
         # fixed
         'objective': trial.suggest_categorical('objective', ['reg:squarederror']),
         'tree_method': trial.suggest_categorical('tree_method', ['hist']),
-        'device': trial.suggest_categorical('device', ['cuda']),
+        'device': trial.suggest_categorical('device', ['gpu']),
         # 'predictor': trial.suggest_categorical('predictor', ['gpu_predictor']),
         'random_state': trial.suggest_categorical('random_state', [seed]),
         # hyperparams

@@ -1,0 +1,12 @@
+Best trial: 192
+Best value (CV RMSE): 0.10483535229125122
+Best params: {'task_type': 'GPU', 'random_state': 42, 'verbose': 0, 'leaf_estimation_iterations': 5, 'n_estimators': 2000, 'learning_rate': 0.02911223100792169, 'depth': 4, 'subsample': 0.048149094832551004, 'bootstrap_type': 'Bernoulli', 'l2_leaf_reg': 16.31771390060747}
+
+====================================
+CPU Time used: 16:54:08
+CPU Percent: 315%
+Memory usage: 14336864kb
+Approx Power usage: 0.20279999999999998
+Walltime usage: 05:57:25
+
+====================================

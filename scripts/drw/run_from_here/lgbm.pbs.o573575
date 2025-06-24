@@ -1,0 +1,12 @@
+Best trial: 142
+Best value (CV RMSE): 0.11416563186250461
+Best params: {'objective': 'regression', 'device': 'gpu', 'random_state': 42, 'verbose': 0, 'n_estimators': 1000, 'learning_rate': 0.00682416083148208, 'num_leaves': 30, 'subsample': 0.1499693487730222, 'colsample_bytree': 0.5945014264624514, 'colsample_bynode': 0.32753830168739556, 'reg_alpha': 99.66831452640456, 'reg_lambda': 67.69981737843722}
+
+====================================
+CPU Time used: 71:38:08
+CPU Percent: 398%
+Memory usage: 16119792kb
+Approx Power usage: 0.8596000000000001
+Walltime usage: 19:28:16
+
+====================================
