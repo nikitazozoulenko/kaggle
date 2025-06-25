@@ -1,0 +1,82 @@
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:151: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['volume_weighted_sell'] = sell * log1p_vol
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:152: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['volume_weighted_buy'] = buy * log1p_vol
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:153: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['buy_sell_ratio'] = buy / (sell + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:154: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['selling_pressure'] = sell / (vol + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:157: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['effective_spread_proxy'] = np.abs(buy - sell) / (vol + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:158: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['order_imbalance'] = (bid - ask) / (bid + ask + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:159: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['flow_imbalance'] = (buy - sell) / (buy + sell + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:160: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['liquidity_ratio'] = (bid + ask) / (vol + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:163: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['kyle_lambda'] = df['flow_imbalance'] * np.sqrt(df['order_imbalance'].abs()) / (log1p_vol + EPS)
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:164: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['vol_adjusted_pressure'] =  np.log1p(bid + ask) * np.exp(-vol / (vol.mean() + EPS))
+/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py:167: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df['trade_intensity_asymmetry'] = np.sign(buy_intensity - sell_intensity) * \
+[I 2025-06-25 21:28:24,896] A new study created in memory with name: no-name-43bd33fa-05b9-454e-b4cb-b6aa04012b2c
+[W 2025-06-25 21:28:30,151] Trial 0 failed with parameters: {'objective': 'reg:squarederror', 'tree_method': 'cuda', 'device': 'gpu', 'random_state': 42, 'n_estimators': 2500, 'learning_rate': 0.038087798231965245, 'max_depth': 5, 'subsample': 0.06868922977663994, 'colsample_bytree': 0.19361118426546192, 'colsample_bylevel': 0.1935967122017216, 'colsample_bynode': 0.13485016730091967, 'lambda': 133.94334706750476, 'alpha': 39.91305878561679, 'gamma': 2.1242177333881367} because of the following error: XGBoostError("Invalid Input: 'cuda', valid values are: {'approx', 'auto', 'exact', 'gpu_hist', 'hist'}").
+Traceback (most recent call last):
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 197, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 122, in objective
+    mdl.fit(X_train, y_train)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1247, in fit
+    self._Booster = train(
+                    ^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/training.py", line 183, in train
+    bst.update(dtrain, iteration=i, fobj=obj)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 2246, in update
+    _check_call(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 310, in _check_call
+    raise XGBoostError(py_str(_LIB.XGBGetLastError()))
+xgboost.core.XGBoostError: Invalid Input: 'cuda', valid values are: {'approx', 'auto', 'exact', 'gpu_hist', 'hist'}
+[W 2025-06-25 21:28:30,204] Trial 0 failed with value None.
+Traceback (most recent call last):
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 248, in <module>
+    do_opuna_optimization(
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 130, in do_opuna_optimization
+    study.optimize(objective, n_trials=n_trials)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/study.py", line 475, in optimize
+    _optimize(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 63, in _optimize
+    _optimize_sequential(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 160, in _optimize_sequential
+    frozen_trial = _run_trial(study, func, catch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 248, in _run_trial
+    raise func_err
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 197, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 122, in objective
+    mdl.fit(X_train, y_train)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1247, in fit
+    self._Booster = train(
+                    ^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/training.py", line 183, in train
+    bst.update(dtrain, iteration=i, fobj=obj)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 2246, in update
+    _check_call(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 310, in _check_call
+    raise XGBoostError(py_str(_LIB.XGBGetLastError()))
+xgboost.core.XGBoostError: Invalid Input: 'cuda', valid values are: {'approx', 'auto', 'exact', 'gpu_hist', 'hist'}
