@@ -1,0 +1,16 @@
+#!/bin/bash
+#PBS -l walltime=72:0:0
+#PBS -l select=1:ncpus=4:mem=32gb:ngpus=1:gpu_type=L40S
+
+cd $PBS_O_WORKDIR
+
+eval "$(~/miniforge3/bin/conda shell.bash hook)"
+conda activate hydraboost
+
+python ../../../do_optuna.py \
+    --models "XGBoost" \
+    --logs_dir "/rds/general/user/nz423/home/kaggle/logs/" \
+    --data_dir "/rds/general/user/nz423/home/Data/drw-crypto-market-prediction/" \
+    --n_optuna_trials 200 \
+    --kfolds 5 \
+    --seed 42

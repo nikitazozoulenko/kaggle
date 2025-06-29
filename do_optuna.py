@@ -32,9 +32,9 @@ def xgb_params(trial):
         # 'predictor': trial.suggest_categorical('predictor', ['gpu_predictor']),
         'random_state': trial.suggest_categorical('random_state', [seed]),
         # hyperparams
-        'n_estimators': trial.suggest_int('n_estimators', 1000, 2000, step=100),
-        'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.1, log=True),
-        'max_depth': trial.suggest_int('max_depth', 3, 7),
+        'n_estimators': trial.suggest_int('n_estimators', 1000, 5000, step=500),
+        'learning_rate': trial.suggest_float('learning_rate', 0.0002, 0.05, log=True),
+        'max_depth': trial.suggest_int('max_depth', 3, 6),
         'subsample': trial.suggest_float('subsample', 0.01, 0.25, log=True),
         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.1, 0.7),
         'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.1, 0.7),
@@ -50,13 +50,13 @@ def lgbm_params(trial):
     return {
         # fixed
         'objective': trial.suggest_categorical('objective', ['regression']),
-        'device': trial.suggest_categorical('device', ['cuda']),
+        'device': trial.suggest_categorical('device', ['gpu']),
         'random_state': trial.suggest_categorical('random_state', [seed]),
         'verbose': trial.suggest_categorical('verbose', [0]),  # no output
         # hyperparams
-        'n_estimators': trial.suggest_int('n_estimators', 1000, 2000, step=100),
-        'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.1, log=True),
-        'num_leaves': trial.suggest_int('num_leaves', 16, 128),
+        'n_estimators': trial.suggest_int('n_estimators', 1000, 5000, step=500),
+        'learning_rate': trial.suggest_float('learning_rate', 0.0002, 0.05, log=True),
+        'num_leaves': trial.suggest_int('num_leaves', 16, 64),
         'subsample': trial.suggest_float('subsample', 0.01, 0.25, log=True),
         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.3, 0.7),
         'colsample_bynode': trial.suggest_float('colsample_bynode', 0.3, 0.7),
@@ -75,12 +75,12 @@ def catb_params(trial):
         'verbose': trial.suggest_categorical('verbose', [0]),  # no output
         'leaf_estimation_iterations': trial.suggest_categorical('leaf_estimation_iterations', [5]), #default 10
         # hyperparams
-        'n_estimators': trial.suggest_int('n_estimators', 1000, 2000, step=100),
-        'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.1, log=True),
-        'depth': trial.suggest_int('depth', 3, 7),
+        'n_estimators': trial.suggest_int('n_estimators', 1000, 5000, step=500),
+        'learning_rate': trial.suggest_float('learning_rate', 0.0002, 0.05, log=True),
+        'depth': trial.suggest_int('depth', 3, 6),
         'subsample': trial.suggest_float('subsample', 0.01, 0.25, log=True),
         #'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.05, 0.25, log=True), # only supported on cpu
-        #'bootstrap_type': trial.suggest_categorical('bootstrap_type', ['Bernoulli']),  
+        'bootstrap_type': trial.suggest_categorical('bootstrap_type', ['Bernoulli']),  
         'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 10, 200, log=True),
     }# other? max_bin?
 
@@ -138,6 +138,39 @@ def do_opuna_optimization(
 
 
 
+def add_features_remove_const(df):
+    bid = df['bid_qty']
+    ask = df['ask_qty']
+    vol = df['volume']
+    log1p_vol = np.log1p(vol)
+    buy = df['buy_qty']
+    sell = df['sell_qty']
+    EPS = 1e-6
+    
+    # basic features
+    df['volume_weighted_sell'] = sell * log1p_vol
+    df['volume_weighted_buy'] = buy * log1p_vol
+    df['buy_sell_ratio'] = buy / (sell + EPS)
+    df['selling_pressure'] = sell / (vol + EPS)
+    
+    # more advanced features
+    df['effective_spread_proxy'] = np.abs(buy - sell) / (vol + EPS)
+    df['order_imbalance'] = (bid - ask) / (bid + ask + EPS)
+    df['flow_imbalance'] = (buy - sell) / (buy + sell + EPS)
+    df['liquidity_ratio'] = (bid + ask) / (vol + EPS)
+    
+    # some more advanced features from kaggle
+    df['kyle_lambda'] = df['flow_imbalance'] * np.sqrt(df['order_imbalance'].abs()) / (log1p_vol + EPS)
+    df['vol_adjusted_pressure'] =  np.log1p(bid + ask) * np.exp(-vol / (vol.mean() + EPS))
+    buy_intensity = buy / (vol + 1e-6)
+    sell_intensity = sell / (vol + 1e-6)
+    df['trade_intensity_asymmetry'] = np.sign(buy_intensity - sell_intensity) * \
+                            np.log1p(np.abs(buy_intensity - sell_intensity))
+                            
+    drop0999 = ['X146', 'X104', 'X116', 'X158', 'X110', 'X152', 'X122', 'X164', 'X170', 'X128', 'X134', 'X176', 'X140', 'X182', 'X363', 'X399', 'X357', 'X393', 'X351', 'X405', 'X411', 'X417', 'X423', 'X429', 'X694', 'X691', 'X682', 'X679', 'X670', 'X667', 'X655', 'X300', 'X658', 'X301', 'X53', 'X643', 'X54', 'X646', 'X631', 'X294']
+    constant_cols = [col for col in train_X.columns if train_X[col].nunique() == 1]
+    df.drop(columns=constant_cols+drop0999, inplace=True)
+                            
 
 
 ######################################################  |
@@ -179,7 +212,7 @@ def parse_args():
         help="Seed for all randomness."
     )
     parser.add_argument(
-        "kfolds",
+        "--kfolds",
         type=int,
         default=5,
         help="Number of folds for optuna cv."
@@ -195,6 +228,7 @@ if __name__ == "__main__":
     #load dataset
     train_X = pd.read_parquet(Path(args.data_dir) / "train.parquet").astype(np.float32)
     train_y = train_X.pop("label")
+    add_features_remove_const(train_X)
 
     # Run experiments
     for model_name in args.models:

@@ -1,0 +1,96 @@
+[I 2025-06-19 20:33:52,725] A new study created in memory with name: no-name-48de4c93-017d-4153-b207-112f460586a7
+[W 2025-06-19 20:34:45,226] Trial 0 failed with parameters: {'objective': 'reg:squarederror', 'tree_method': 'hist', 'device': 'cuda', 'random_state': 42, 'n_estimators': 1400, 'learning_rate': 0.0862735828664018, 'max_depth': 6, 'subsample': 0.06868922977663994, 'colsample_bytree': 0.19361118426546192, 'colsample_bylevel': 0.1935967122017216, 'colsample_bynode': 0.13485016730091967, 'lambda': 133.94334706750476, 'alpha': 39.91305878561679, 'gamma': 2.1242177333881367} because of the following error: XGBoostError('[20:34:44] /workspace/src/data/gradient_index.h:100: Check failed: valid: Input data contains `inf` or a value too large, while `missing` is not set to `inf`\nStack trace:\n  [bt] (0) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x2a6ecc) [0x151ef3049ecc]\n  [bt] (1) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5d5f71) [0x151ef3378f71]\n  [bt] (2) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5e9bac) [0x151ef338cbac]\n  [bt] (3) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5ea949) [0x151ef338d949]\n  [bt] (4) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x57b541) [0x151ef331e541]\n  [bt] (5) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(XGQuantileDMatrixCreateFromCallback+0x178) [0x151ef2f5c3c8]\n  [bt] (6) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0xa052) [0x151f1e05b052]\n  [bt] (7) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0x8925) [0x151f1e059925]\n  [bt] (8) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(ffi_call+0xde) [0x151f1e05a06e]\n\n').
+Traceback (most recent call last):
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 197, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 122, in objective
+    mdl.fit(X_train, y_train)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1222, in fit
+    train_dmatrix, evals = _wrap_evaluation_matrices(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 628, in _wrap_evaluation_matrices
+    train_dmatrix = create_dmatrix(
+                    ^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1137, in _create_dmatrix
+    return QuantileDMatrix(
+           ^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 1614, in __init__
+    self._init(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 1680, in _init
+    _check_call(ret)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 310, in _check_call
+    raise XGBoostError(py_str(_LIB.XGBGetLastError()))
+xgboost.core.XGBoostError: [20:34:44] /workspace/src/data/gradient_index.h:100: Check failed: valid: Input data contains `inf` or a value too large, while `missing` is not set to `inf`
+Stack trace:
+  [bt] (0) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x2a6ecc) [0x151ef3049ecc]
+  [bt] (1) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5d5f71) [0x151ef3378f71]
+  [bt] (2) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5e9bac) [0x151ef338cbac]
+  [bt] (3) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5ea949) [0x151ef338d949]
+  [bt] (4) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x57b541) [0x151ef331e541]
+  [bt] (5) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(XGQuantileDMatrixCreateFromCallback+0x178) [0x151ef2f5c3c8]
+  [bt] (6) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0xa052) [0x151f1e05b052]
+  [bt] (7) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0x8925) [0x151f1e059925]
+  [bt] (8) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(ffi_call+0xde) [0x151f1e05a06e]
+
+
+[W 2025-06-19 20:34:45,331] Trial 0 failed with value None.
+Traceback (most recent call last):
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 214, in <module>
+    do_opuna_optimization(
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 130, in do_opuna_optimization
+    study.optimize(objective, n_trials=n_trials)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/study.py", line 475, in optimize
+    _optimize(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 63, in _optimize
+    _optimize_sequential(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 160, in _optimize_sequential
+    frozen_trial = _run_trial(study, func, catch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 248, in _run_trial
+    raise func_err
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/optuna/study/_optimize.py", line 197, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/kaggle/scripts/drw/run_from_here/../../../do_optuna.py", line 122, in objective
+    mdl.fit(X_train, y_train)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1222, in fit
+    train_dmatrix, evals = _wrap_evaluation_matrices(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 628, in _wrap_evaluation_matrices
+    train_dmatrix = create_dmatrix(
+                    ^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/sklearn.py", line 1137, in _create_dmatrix
+    return QuantileDMatrix(
+           ^^^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 1614, in __init__
+    self._init(
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 1680, in _init
+    _check_call(ret)
+  File "/rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/core.py", line 310, in _check_call
+    raise XGBoostError(py_str(_LIB.XGBGetLastError()))
+xgboost.core.XGBoostError: [20:34:44] /workspace/src/data/gradient_index.h:100: Check failed: valid: Input data contains `inf` or a value too large, while `missing` is not set to `inf`
+Stack trace:
+  [bt] (0) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x2a6ecc) [0x151ef3049ecc]
+  [bt] (1) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5d5f71) [0x151ef3378f71]
+  [bt] (2) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5e9bac) [0x151ef338cbac]
+  [bt] (3) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x5ea949) [0x151ef338d949]
+  [bt] (4) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(+0x57b541) [0x151ef331e541]
+  [bt] (5) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/site-packages/xgboost/lib/libxgboost.so(XGQuantileDMatrixCreateFromCallback+0x178) [0x151ef2f5c3c8]
+  [bt] (6) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0xa052) [0x151f1e05b052]
+  [bt] (7) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(+0x8925) [0x151f1e059925]
+  [bt] (8) /rds/general/user/nz423/home/miniforge3/envs/hydraboost/lib/python3.11/lib-dynload/../../libffi.so.8(ffi_call+0xde) [0x151f1e05a06e]
+
+
